@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ElectronicStore.Api/ElectronicStore.Api.csproj" />
+  <Project Path="ElectronicStore.ConsoleApp/ElectronicStore.ConsoleApp.csproj" />
+  <Project Path="ElectronicStore.Database/ElectronicStore.Database.csproj" />
+  <Project Path="ElectronicStore.Domain/ElectronicStore.Domain.csproj" />
+  <Project Path="ElectronicStore.WinForms/ElectronicStore.WinForms.csproj" />
+</Solution>
