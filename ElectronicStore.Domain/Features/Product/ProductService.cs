@@ -201,4 +201,25 @@ public class ProductService
             Message = "Product deleted successfully."
         };
     }
+
+    public ProductSearchResponseModel SearchProducts(ProductSearchRequestModel model)
+    {
+        string keyword = model.Keyword.Trim();
+        var products = _db.Products.Where(x=> string.IsNullOrWhiteSpace(keyword)|| x.ProductName.
+                                    Contains(keyword)).OrderBy(x=> x.ProductId).Select(x=> new ProductListItemModel
+                                    {
+                                        ProductId = x.ProductId,
+                                        ProductName = x.ProductName,
+                                        Price = x.Price,
+                                        StockQuantity = x.StockQuantity,
+                                    }).ToList();
+
+        return new ProductSearchResponseModel
+        {
+            IsSuccess = true,
+            Message = "Product Search Successfully.",
+            Products = products,
+        };
+
+    }
 }

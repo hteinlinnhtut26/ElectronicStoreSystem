@@ -78,4 +78,9 @@ public class ProductController : ControllerBase
 
         return Ok(response);
     }
+    [HttpPost("Search")]
+    public ProductSearchResponseModel SearchProducts(ProductSearchRequestModel model)
+    {
+        return _productService.SearchProducts(model);
+    }
 }

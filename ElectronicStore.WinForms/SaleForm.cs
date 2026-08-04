@@ -1,3 +1,4 @@
+using ElectronicStore.Domain.Models.Sale;
 using ElectronicStore.WinForms.Clients;
 
 namespace ElectronicStore.WinForms;
@@ -101,5 +102,32 @@ public partial class SaleForm : Form
     private void SaleForm_Load(object sender, EventArgs e)
     {
         LoadSaleList();
+    }
+
+    private void txtSearchSale_TextChanged(
+    object sender,
+    EventArgs e)
+    {
+        var model = new SaleSearchRequestModel
+        {
+            KeyWord = txtSearchSale.Text.Trim()
+        };
+
+        var response =
+            _saleClient.SaleSearch(model);
+
+        if (!response.IsSuccess)
+        {
+            MessageBox.Show(
+                response.Message,
+                "Search Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            return;
+        }
+
+        dgvSales.DataSource = null;
+        dgvSales.DataSource = response.Sales;
     }
 }

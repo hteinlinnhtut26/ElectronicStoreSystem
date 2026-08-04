@@ -6,7 +6,6 @@ namespace ElectronicStore.WinForms;
 public partial class Form1 : Form
 {
     private readonly ProductClient _productClient;
-
     public Form1()
     {
         InitializeComponent();
@@ -24,6 +23,7 @@ public partial class Form1 : Form
         UITheme.StyleTextBox(txtProductName);
         UITheme.StyleTextBox(txtPrice);
         UITheme.StyleTextBox(txtStockQuantity);
+        UITheme.StyleTextBox(txtSearchProduct);
         lblFormHint.ForeColor = UITheme.TextMuted;
     }
 
@@ -42,13 +42,71 @@ public partial class Form1 : Form
 
     private void btnAddProduct_Click(object sender, EventArgs e)
     {
-        string productName = txtProductName.Text;
+        string productName = txtProductName.Text.Trim();
 
-        decimal price =
-            Convert.ToDecimal(txtPrice.Text);
+        if (string.IsNullOrWhiteSpace(productName))
+        {
+            MessageBox.Show(
+                "Please enter product name.",
+                "Validation",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
 
-        int stockQuantity =
-            Convert.ToInt32(txtStockQuantity.Text);
+            txtProductName.Focus();
+            return;
+        }
+
+        if (!decimal.TryParse(
+            txtPrice.Text,
+            out decimal price))
+        {
+            MessageBox.Show(
+                "Please enter a valid price.",
+                "Validation",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+
+            txtPrice.Focus();
+            return;
+        }
+
+        if (price <= 0)
+        {
+            MessageBox.Show(
+                "Price must be greater than zero.",
+                "Validation",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+
+            txtPrice.Focus();
+            return;
+        }
+
+        if (!int.TryParse(
+            txtStockQuantity.Text,
+            out int stockQuantity))
+        {
+            MessageBox.Show(
+                "Please enter a valid stock quantity.",
+                "Validation",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+
+            txtStockQuantity.Focus();
+            return;
+        }
+
+        if (stockQuantity < 0)
+        {
+            MessageBox.Show(
+                "Stock quantity cannot be negative.",
+                "Validation",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+
+            txtStockQuantity.Focus();
+            return;
+        }
 
         if (txtProductName.Tag == null)
         {
@@ -63,6 +121,11 @@ public partial class Form1 : Form
                 _productClient.CreateProduct(request);
 
             MessageBox.Show(response.Message);
+
+            if (!response.IsSuccess)
+            {
+                return;
+            }
         }
         else
         {
@@ -81,6 +144,11 @@ public partial class Form1 : Form
                 _productClient.UpdateProduct(request);
 
             MessageBox.Show(response.Message);
+
+            if (!response.IsSuccess)
+            {
+                return;
+            }
         }
 
         txtProductName.Clear();
@@ -88,10 +156,11 @@ public partial class Form1 : Form
         txtStockQuantity.Clear();
 
         txtProductName.Tag = null;
-
         btnAddProduct.Text = "Add Product";
 
         LoadProductList();
+
+        txtProductName.Focus();
     }
 
     private void LoadProductList()
@@ -99,11 +168,20 @@ public partial class Form1 : Form
         var response =
             _productClient.GetProducts();
 
-        if (response.IsSuccess)
+        if (!response.IsSuccess)
         {
-            dgvProducts.DataSource =
-                response.Products;
+            MessageBox.Show(
+                response.Message,
+                "Connection Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            dgvProducts.DataSource = null;
+            return;
         }
+
+        dgvProducts.DataSource = null;
+        dgvProducts.DataSource = response.Products;
     }
 
     private void dgvProducts_CellContentClick(
@@ -181,5 +259,32 @@ public partial class Form1 : Form
     {
         var saleForm = new SaleForm();
         saleForm.ShowDialog();
+    }
+
+    private void txtSearchProduct_TextChanged(
+    object sender,
+    EventArgs e)
+    {
+        var model = new ProductSearchRequestModel
+        {
+            Keyword = txtSearchProduct.Text.Trim()
+        };
+
+        var response =
+            _productClient.SearchProduct(model);
+
+        if (!response.IsSuccess)
+        {
+            MessageBox.Show(
+                response.Message,
+                "Search Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            return;
+        }
+
+        dgvProducts.DataSource = null;
+        dgvProducts.DataSource = response.Products;
     }
 }

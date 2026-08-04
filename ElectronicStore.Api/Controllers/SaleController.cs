@@ -59,4 +59,11 @@ public class SaleController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost("Search")]
+    public IActionResult SearchSale(SaleSearchRequestModel model)
+    {
+        var response = _saleService.SearchSale(model);
+        return Ok(response);
+    }
 }

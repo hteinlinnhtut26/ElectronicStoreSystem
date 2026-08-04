@@ -192,4 +192,28 @@ public class SaleService
     {
         return $"V-{DateTime.Now:yyyyMMddHHmmssfff}";
     }
+
+    public SaleSearchResponseModel SearchSale(SaleSearchRequestModel model)
+    {
+        string keyWord = model.KeyWord;
+        var sales = _db.Sales.Where(x=> string.IsNullOrWhiteSpace(keyWord) || x.VoucherNo
+                             .Contains(keyWord))
+                             .OrderBy(x=> x.SaleDate)
+                             .Select(x=> new SaleListItemModel
+                             {
+                                 SaleId = x.SaleId,
+                                 VoucherNo = x.VoucherNo,
+                                 SaleDate = x.SaleDate,
+                                 TotalAmount = x.TotalAmount,
+                                 PaidAmount = x.PaidAmount,
+                                 ChangeAmount = x.ChangeAmount,
+                             }).ToList();
+
+        return new SaleSearchResponseModel
+        {
+            IsSuccess = true,
+            Message = "Sale search completed successfully.",
+            Sales = sales
+        };
+    }
 }

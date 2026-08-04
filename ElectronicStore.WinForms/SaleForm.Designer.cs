@@ -25,13 +25,17 @@ namespace ElectronicStore.WinForms
             btnCreateSale = new Button();
             btnLoadSales = new Button();
             lblGridTitle = new Label();
+            label1 = new Label();
+            txtSearchSale = new TextBox();
             pnlHeader.SuspendLayout();
             pnlContent.SuspendLayout();
             pnlSalesCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSales).BeginInit();
             pnlToolbar.SuspendLayout();
             SuspendLayout();
+            // 
             // pnlHeader
+            // 
             pnlHeader.Controls.Add(lblSubtitle);
             pnlHeader.Controls.Add(lblTitle);
             pnlHeader.Dock = DockStyle.Top;
@@ -39,19 +43,25 @@ namespace ElectronicStore.WinForms
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Size = new Size(1100, 94);
             pnlHeader.TabIndex = 0;
+            // 
             // lblSubtitle
+            // 
             lblSubtitle.Location = new Point(30, 55);
             lblSubtitle.Name = "lblSubtitle";
             lblSubtitle.Size = new Size(420, 20);
             lblSubtitle.TabIndex = 1;
             lblSubtitle.Text = "Review transactions and open voucher details";
+            // 
             // lblTitle
+            // 
             lblTitle.Location = new Point(28, 18);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(250, 35);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Sales History";
+            // 
             // pnlContent
+            // 
             pnlContent.Controls.Add(pnlSalesCard);
             pnlContent.Dock = DockStyle.Fill;
             pnlContent.Location = new Point(0, 94);
@@ -59,7 +69,9 @@ namespace ElectronicStore.WinForms
             pnlContent.Padding = new Padding(24);
             pnlContent.Size = new Size(1100, 606);
             pnlContent.TabIndex = 1;
+            // 
             // pnlSalesCard
+            // 
             pnlSalesCard.Controls.Add(dgvSales);
             pnlSalesCard.Controls.Add(pnlToolbar);
             pnlSalesCard.Dock = DockStyle.Fill;
@@ -68,7 +80,9 @@ namespace ElectronicStore.WinForms
             pnlSalesCard.Padding = new Padding(1);
             pnlSalesCard.Size = new Size(1052, 558);
             pnlSalesCard.TabIndex = 0;
+            // 
             // dgvSales
+            // 
             dgvSales.Columns.AddRange(new DataGridViewColumn[] { colViewDetail });
             dgvSales.Dock = DockStyle.Fill;
             dgvSales.Location = new Point(1, 77);
@@ -77,14 +91,20 @@ namespace ElectronicStore.WinForms
             dgvSales.Size = new Size(1050, 480);
             dgvSales.TabIndex = 1;
             dgvSales.CellContentClick += dgvSales_CellContentClick;
+            // 
             // colViewDetail
+            // 
             colViewDetail.FillWeight = 70F;
             colViewDetail.HeaderText = "Action";
             colViewDetail.Name = "colViewDetail";
             colViewDetail.ReadOnly = true;
             colViewDetail.Text = "View Detail";
             colViewDetail.UseColumnTextForButtonValue = true;
+            // 
             // pnlToolbar
+            // 
+            pnlToolbar.Controls.Add(txtSearchSale);
+            pnlToolbar.Controls.Add(label1);
             pnlToolbar.Controls.Add(btnCreateSale);
             pnlToolbar.Controls.Add(btnLoadSales);
             pnlToolbar.Controls.Add(lblGridTitle);
@@ -93,7 +113,9 @@ namespace ElectronicStore.WinForms
             pnlToolbar.Name = "pnlToolbar";
             pnlToolbar.Size = new Size(1050, 76);
             pnlToolbar.TabIndex = 0;
+            // 
             // btnCreateSale
+            // 
             btnCreateSale.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCreateSale.Location = new Point(882, 18);
             btnCreateSale.Name = "btnCreateSale";
@@ -101,7 +123,9 @@ namespace ElectronicStore.WinForms
             btnCreateSale.TabIndex = 2;
             btnCreateSale.Text = "+ Create Sale";
             btnCreateSale.Click += btnCreateSale_Click;
+            // 
             // btnLoadSales
+            // 
             btnLoadSales.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLoadSales.Location = new Point(726, 18);
             btnLoadSales.Name = "btnLoadSales";
@@ -109,15 +133,36 @@ namespace ElectronicStore.WinForms
             btnLoadSales.TabIndex = 1;
             btnLoadSales.Text = "Refresh Sales";
             btnLoadSales.Click += btnLoadSales_Click;
+            // 
             // lblGridTitle
+            // 
             lblGridTitle.AutoSize = true;
             lblGridTitle.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
             lblGridTitle.Location = new Point(20, 24);
             lblGridTitle.Name = "lblGridTitle";
-            lblGridTitle.Size = new Size(132, 25);
+            lblGridTitle.Size = new Size(115, 25);
             lblGridTitle.TabIndex = 0;
             lblGridTitle.Text = "Transactions";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(161, 43);
+            label1.Name = "label1";
+            label1.Size = new Size(69, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Search Sale ";
+            // 
+            // txtSearchSale
+            // 
+            txtSearchSale.Location = new Point(236, 35);
+            txtSearchSale.Name = "txtSearchSale";
+            txtSearchSale.Size = new Size(185, 23);
+            txtSearchSale.TabIndex = 4;
+            txtSearchSale.TextChanged += txtSearchSale_TextChanged;
+            // 
             // SaleForm
+            // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1100, 700);
@@ -127,7 +172,6 @@ namespace ElectronicStore.WinForms
             Text = "Electronic Store - Sales History";
             Load += SaleForm_Load;
             pnlHeader.ResumeLayout(false);
-            pnlHeader.PerformLayout();
             pnlContent.ResumeLayout(false);
             pnlSalesCard.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvSales).EndInit();
@@ -149,5 +193,7 @@ namespace ElectronicStore.WinForms
         private Button btnCreateSale;
         private DataGridView dgvSales;
         private DataGridViewButtonColumn colViewDetail;
+        private TextBox txtSearchSale;
+        private Label label1;
     }
 }
