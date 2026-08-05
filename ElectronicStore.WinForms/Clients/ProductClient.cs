@@ -166,11 +166,11 @@ public class ProductClient
             string json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             HttpClient client = new HttpClient();
-            var response = client.PostAsync($"{_baseUrl}/Search",stringContent).Result;
+            var response = client.PostAsync($"{_baseUrl}/Search", stringContent).Result;
             if (response.IsSuccessStatusCode)
             {
-               var content = response.Content.ReadAsStringAsync().Result;
-               var responseModel = JsonConvert.DeserializeObject<ProductSearchResponseModel>(content);
+                var content = response.Content.ReadAsStringAsync().Result;
+                var responseModel = JsonConvert.DeserializeObject<ProductSearchResponseModel>(content);
                 return responseModel ?? new ProductSearchResponseModel
                 {
                     IsSuccess = false,
@@ -189,7 +189,43 @@ public class ProductClient
             {
                 Message = "Cannot connect to the API server"
             };
-            
+
+        }
+    }
+
+    public ProductLowStockResponseModel GetLowStockProducts(ProductLowStockRequestModel model)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpClient client = new HttpClient();
+            var response = client.PostAsync($"{_baseUrl}/LowStock", stringContent).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = response.Content.ReadAsStringAsync().Result;
+                ProductLowStockResponseModel? responseModel = JsonConvert.DeserializeObject<ProductLowStockResponseModel>(content);
+                return responseModel ?? new ProductLowStockResponseModel
+                {
+                    IsSuccess = false,
+                    Message = "Unable to retrieve low stock products"
+                };
+            }
+            return new ProductLowStockResponseModel
+            {
+                IsSuccess = false,
+                Message = "Unable to retrieve low stock products"
+            };
+        }
+        catch
+        {
+
+            return new ProductLowStockResponseModel 
+            {
+                Message = "Cannot connect to the API server"
+            };
         }
     }
 }

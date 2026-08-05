@@ -6,6 +6,7 @@ namespace ElectronicStore.WinForms;
 public partial class Form1 : Form
 {
     private readonly ProductClient _productClient;
+
     public Form1()
     {
         InitializeComponent();
@@ -13,36 +14,46 @@ public partial class Form1 : Form
         _productClient = new ProductClient();
 
         UITheme.ApplyFormTheme(this);
-        UITheme.StyleHeaderPanel(pnlHeader, lblTitle, lblSubtitle);
+        UITheme.StyleHeaderPanel(
+            pnlHeader,
+            lblTitle,
+            lblSubtitle);
+
         UITheme.StyleCardPanel(pnlGridCard);
         UITheme.StyleCardPanel(pnlProductCard);
         UITheme.StyleDataGridView(dgvProducts);
+
         UITheme.StylePrimaryButton(btnAddProduct);
         UITheme.StyleSecondaryButton(btnLoadProducts);
         UITheme.StyleSecondaryButton(btnSale);
+
         UITheme.StyleTextBox(txtProductName);
         UITheme.StyleTextBox(txtPrice);
         UITheme.StyleTextBox(txtStockQuantity);
         UITheme.StyleTextBox(txtSearchProduct);
+
         lblFormHint.ForeColor = UITheme.TextMuted;
+
+        btnLowStock.Text = "Low Stock";
+        btnLowStock.Width = 100;
+
+        nudLowStock.Width = 60;
+        txtSearchProduct.Width = 180;
     }
 
-    private void btnLoadProducts_Click(object sender, EventArgs e)
+    private void btnLoadProducts_Click(
+        object sender,
+        EventArgs e)
     {
-        var response = _productClient.GetProducts();
-
-        if (!response.IsSuccess)
-        {
-            MessageBox.Show(response.Message);
-            return;
-        }
-
-        dgvProducts.DataSource = response.Products;
+        LoadProductList();
     }
 
-    private void btnAddProduct_Click(object sender, EventArgs e)
+    private void btnAddProduct_Click(
+        object sender,
+        EventArgs e)
     {
-        string productName = txtProductName.Text.Trim();
+        string productName =
+            txtProductName.Text.Trim();
 
         if (string.IsNullOrWhiteSpace(productName))
         {
@@ -110,12 +121,13 @@ public partial class Form1 : Form
 
         if (txtProductName.Tag == null)
         {
-            var request = new ProductCreateRequestModel
-            {
-                ProductName = productName,
-                Price = price,
-                StockQuantity = stockQuantity
-            };
+            var request =
+                new ProductCreateRequestModel
+                {
+                    ProductName = productName,
+                    Price = price,
+                    StockQuantity = stockQuantity
+                };
 
             var response =
                 _productClient.CreateProduct(request);
@@ -132,13 +144,14 @@ public partial class Form1 : Form
             int productId =
                 Convert.ToInt32(txtProductName.Tag);
 
-            var request = new ProductUpdateRequestModel
-            {
-                ProductId = productId,
-                ProductName = productName,
-                Price = price,
-                StockQuantity = stockQuantity
-            };
+            var request =
+                new ProductUpdateRequestModel
+                {
+                    ProductId = productId,
+                    ProductName = productName,
+                    Price = price,
+                    StockQuantity = stockQuantity
+                };
 
             var response =
                 _productClient.UpdateProduct(request);
@@ -165,8 +178,7 @@ public partial class Form1 : Form
 
     private void LoadProductList()
     {
-        var response =
-            _productClient.GetProducts();
+        var response = _productClient.GetProducts();
 
         if (!response.IsSuccess)
         {
@@ -180,13 +192,74 @@ public partial class Form1 : Form
             return;
         }
 
+        BindProductGrid(response.Products);
+    }
+
+    private void BindProductGrid(List<ProductListItemModel> products)
+    {
         dgvProducts.DataSource = null;
-        dgvProducts.DataSource = response.Products;
+        dgvProducts.DataSource = products;
+
+        ConfigureProductGridColumns();
+    }
+
+    private void ConfigureProductGridColumns()
+    {
+        if (dgvProducts.Columns.Count == 0)
+        {
+            return;
+        }
+
+        dgvProducts.AutoSizeColumnsMode =
+            DataGridViewAutoSizeColumnsMode.None;
+
+        dgvProducts.ScrollBars = ScrollBars.Both;
+        dgvProducts.RowHeadersVisible = false;
+
+        if (dgvProducts.Columns["colEdit"] != null)
+        {
+            dgvProducts.Columns["colEdit"].Width = 80;
+            dgvProducts.Columns["colEdit"].HeaderText = "Edit";
+        }
+
+        if (dgvProducts.Columns["colDelete"] != null)
+        {
+            dgvProducts.Columns["colDelete"].Width = 90;
+            dgvProducts.Columns["colDelete"].HeaderText = "Delete";
+        }
+
+        if (dgvProducts.Columns["ProductId"] != null)
+        {
+            dgvProducts.Columns["ProductId"].Width = 80;
+            dgvProducts.Columns["ProductId"].HeaderText = "Product ID";
+        }
+
+        if (dgvProducts.Columns["ProductName"] != null)
+        {
+            dgvProducts.Columns["ProductName"].Width = 180;
+            dgvProducts.Columns["ProductName"].HeaderText = "Product Name";
+        }
+
+        if (dgvProducts.Columns["Price"] != null)
+        {
+            dgvProducts.Columns["Price"].Width = 100;
+            dgvProducts.Columns["Price"].HeaderText = "Price";
+            dgvProducts.Columns["Price"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleRight;
+        }
+
+        if (dgvProducts.Columns["StockQuantity"] != null)
+        {
+            dgvProducts.Columns["StockQuantity"].Width = 110;
+            dgvProducts.Columns["StockQuantity"].HeaderText = "Stock Qty";
+            dgvProducts.Columns["StockQuantity"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+        }
     }
 
     private void dgvProducts_CellContentClick(
-    object sender,
-    DataGridViewCellEventArgs e)
+        object sender,
+        DataGridViewCellEventArgs e)
     {
         if (e.RowIndex < 0)
         {
@@ -195,49 +268,58 @@ public partial class Form1 : Form
 
         if (dgvProducts.Columns[e.ColumnIndex].Name == "colEdit")
         {
-            var row = dgvProducts.Rows[e.RowIndex];
+            var row =
+                dgvProducts.Rows[e.RowIndex];
 
             int productId =
-                Convert.ToInt32(row.Cells["ProductId"].Value);
+                Convert.ToInt32(
+                    row.Cells["ProductId"].Value);
 
             txtProductName.Text =
-                Convert.ToString(row.Cells["ProductName"].Value)
+                Convert.ToString(
+                    row.Cells["ProductName"].Value)
                 ?? string.Empty;
 
             txtPrice.Text =
-                Convert.ToString(row.Cells["Price"].Value)
+                Convert.ToString(
+                    row.Cells["Price"].Value)
                 ?? string.Empty;
 
             txtStockQuantity.Text =
-                Convert.ToString(row.Cells["StockQuantity"].Value)
+                Convert.ToString(
+                    row.Cells["StockQuantity"].Value)
                 ?? string.Empty;
 
             txtProductName.Tag = productId;
-
             btnAddProduct.Text = "Update Product";
         }
 
         if (dgvProducts.Columns[e.ColumnIndex].Name == "colDelete")
         {
-            var row = dgvProducts.Rows[e.RowIndex];
+            var row =
+                dgvProducts.Rows[e.RowIndex];
 
             int productId =
-                Convert.ToInt32(row.Cells["ProductId"].Value);
+                Convert.ToInt32(
+                    row.Cells["ProductId"].Value);
 
             string productName =
-                Convert.ToString(row.Cells["ProductName"].Value)
+                Convert.ToString(
+                    row.Cells["ProductName"].Value)
                 ?? string.Empty;
 
-            var confirmResult = MessageBox.Show(
-                $"Are you sure you want to delete {productName}?",
-                "Confirm Delete",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+            var confirmResult =
+                MessageBox.Show(
+                    $"Are you sure you want to delete {productName}?",
+                    "Confirm Delete",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
             if (confirmResult == DialogResult.Yes)
             {
                 var response =
-                    _productClient.DeleteProduct(productId);
+                    _productClient.DeleteProduct(
+                        productId);
 
                 MessageBox.Show(response.Message);
 
@@ -247,17 +329,22 @@ public partial class Form1 : Form
                 }
             }
         }
-
     }
 
-    private void Form1_Load(object sender, EventArgs e)
+    private void Form1_Load(
+        object sender,
+        EventArgs e)
     {
         LoadProductList();
     }
 
-    private void btnSale_Click(object sender, EventArgs e)
+    private void btnSale_Click(
+        object sender,
+        EventArgs e)
     {
-        var saleForm = new SaleForm();
+        var saleForm =
+            new SaleForm();
+
         saleForm.ShowDialog();
     }
 
@@ -270,8 +357,7 @@ public partial class Form1 : Form
             Keyword = txtSearchProduct.Text.Trim()
         };
 
-        var response =
-            _productClient.SearchProduct(model);
+        var response = _productClient.SearchProduct(model);
 
         if (!response.IsSuccess)
         {
@@ -284,7 +370,29 @@ public partial class Form1 : Form
             return;
         }
 
-        dgvProducts.DataSource = null;
-        dgvProducts.DataSource = response.Products;
+        BindProductGrid(response.Products);
+    }
+
+    private void btnLowStock_Click(object sender, EventArgs e)
+    {
+        var model = new ProductLowStockRequestModel
+        {
+            Stock = (int)nudLowStock.Value
+        };
+
+        var response = _productClient.GetLowStockProducts(model);
+
+        if (!response.IsSuccess)
+        {
+            MessageBox.Show(
+                response.Message,
+                "Low Stock Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            return;
+        }
+
+        BindProductGrid(response.Products);
     }
 }

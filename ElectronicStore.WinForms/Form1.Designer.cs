@@ -34,6 +34,9 @@ namespace ElectronicStore.WinForms
             colEdit = new DataGridViewButtonColumn();
             colDelete = new DataGridViewButtonColumn();
             pnlGridToolbar = new Panel();
+            btnLowStock = new Button();
+            nudLowStock = new NumericUpDown();
+            label1 = new Label();
             lblSearch = new Label();
             txtSearchProduct = new TextBox();
             btnLoadProducts = new Button();
@@ -44,6 +47,7 @@ namespace ElectronicStore.WinForms
             pnlGridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
             pnlGridToolbar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudLowStock).BeginInit();
             SuspendLayout();
             // 
             // pnlHeader
@@ -114,9 +118,9 @@ namespace ElectronicStore.WinForms
             // btnAddProduct
             // 
             btnAddProduct.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnAddProduct.Location = new Point(24, 337);
+            btnAddProduct.Location = new Point(22, 324);
             btnAddProduct.Name = "btnAddProduct";
-            btnAddProduct.Size = new Size(292, 42);
+            btnAddProduct.Size = new Size(292, 44);
             btnAddProduct.TabIndex = 8;
             btnAddProduct.Text = "Add Product";
             btnAddProduct.Click += btnAddProduct_Click;
@@ -234,6 +238,9 @@ namespace ElectronicStore.WinForms
             // 
             // pnlGridToolbar
             // 
+            pnlGridToolbar.Controls.Add(btnLowStock);
+            pnlGridToolbar.Controls.Add(nudLowStock);
+            pnlGridToolbar.Controls.Add(label1);
             pnlGridToolbar.Controls.Add(lblSearch);
             pnlGridToolbar.Controls.Add(txtSearchProduct);
             pnlGridToolbar.Controls.Add(btnLoadProducts);
@@ -244,10 +251,39 @@ namespace ElectronicStore.WinForms
             pnlGridToolbar.Size = new Size(1134, 68);
             pnlGridToolbar.TabIndex = 0;
             // 
+            // btnLowStock
+            // 
+            btnLowStock.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnLowStock.Location = new Point(610, 20);
+            btnLowStock.Name = "btnLowStock";
+            btnLowStock.Size = new Size(81, 26);
+            btnLowStock.TabIndex = 9;
+            btnLowStock.Text = "Low Stock";
+            btnLowStock.Click += btnLowStock_Click;
+            // 
+            // nudLowStock
+            // 
+            nudLowStock.Location = new Point(544, 23);
+            nudLowStock.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            nudLowStock.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudLowStock.Name = "nudLowStock";
+            nudLowStock.Size = new Size(60, 23);
+            nudLowStock.TabIndex = 5;
+            nudLowStock.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(477, 28);
+            label1.Name = "label1";
+            label1.Size = new Size(61, 15);
+            label1.TabIndex = 4;
+            label1.Text = "Low Stock";
+            // 
             // lblSearch
             // 
             lblSearch.AutoSize = true;
-            lblSearch.Location = new Point(456, 28);
+            lblSearch.Location = new Point(170, 28);
             lblSearch.Name = "lblSearch";
             lblSearch.Size = new Size(87, 15);
             lblSearch.TabIndex = 2;
@@ -255,7 +291,7 @@ namespace ElectronicStore.WinForms
             // 
             // txtSearchProduct
             // 
-            txtSearchProduct.Location = new Point(571, 20);
+            txtSearchProduct.Location = new Point(263, 23);
             txtSearchProduct.Name = "txtSearchProduct";
             txtSearchProduct.Size = new Size(199, 23);
             txtSearchProduct.TabIndex = 3;
@@ -299,6 +335,7 @@ namespace ElectronicStore.WinForms
             ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
             pnlGridToolbar.ResumeLayout(false);
             pnlGridToolbar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudLowStock).EndInit();
             ResumeLayout(false);
         }
 
@@ -328,5 +365,8 @@ namespace ElectronicStore.WinForms
         private Button btnAddProduct;
         private TextBox txtSearchProduct;
         private Label lblSearch;
+        private Label label1;
+        private Button btnLowStock;
+        private NumericUpDown nudLowStock;
     }
 }

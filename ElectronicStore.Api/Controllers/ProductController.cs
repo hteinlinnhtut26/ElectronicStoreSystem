@@ -83,4 +83,9 @@ public class ProductController : ControllerBase
     {
         return _productService.SearchProducts(model);
     }
+    [HttpPost("LowStock")]
+    public ProductLowStockResponseModel GetLowStock(ProductLowStockRequestModel model)
+    {
+        return _productService.GetLowStockProducts(model);
+    }
 }

@@ -222,4 +222,25 @@ public class ProductService
         };
 
     }
+
+    public ProductLowStockResponseModel GetLowStockProducts(ProductLowStockRequestModel model)
+    {
+        var products = _db.Products
+            .Where(x=> x.StockQuantity <= model.Stock)
+            .OrderBy (x=> x.StockQuantity)
+            .Select (x=> new ProductListItemModel
+            {
+                ProductId= x.ProductId,
+                ProductName= x.ProductName,
+                Price= x.Price,
+                StockQuantity= x.StockQuantity,
+            })
+            .ToList();
+        return new ProductLowStockResponseModel
+        {
+            IsSuccess = true,
+            Message = "Low stock retrieved successfully",
+            Products = products
+        };
+    }
 }
