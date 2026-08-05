@@ -9,6 +9,7 @@ namespace ElectronicStore.Domain.Models.Sale
     public class SaleSearchRequestModel
     {
         public string KeyWord { get; set; } = string.Empty;
+        public DateTime? SaleDate { get; set; }  
     }
 
     public class SaleSearchResponseModel

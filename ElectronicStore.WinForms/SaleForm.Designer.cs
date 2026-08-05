@@ -22,11 +22,12 @@ namespace ElectronicStore.WinForms
             dgvSales = new DataGridView();
             colViewDetail = new DataGridViewButtonColumn();
             pnlToolbar = new Panel();
+            txtSearchSale = new TextBox();
+            label1 = new Label();
             btnCreateSale = new Button();
             btnLoadSales = new Button();
             lblGridTitle = new Label();
-            label1 = new Label();
-            txtSearchSale = new TextBox();
+            dtpSaleDate = new DateTimePicker();
             pnlHeader.SuspendLayout();
             pnlContent.SuspendLayout();
             pnlSalesCard.SuspendLayout();
@@ -103,6 +104,7 @@ namespace ElectronicStore.WinForms
             // 
             // pnlToolbar
             // 
+            pnlToolbar.Controls.Add(dtpSaleDate);
             pnlToolbar.Controls.Add(txtSearchSale);
             pnlToolbar.Controls.Add(label1);
             pnlToolbar.Controls.Add(btnCreateSale);
@@ -113,6 +115,23 @@ namespace ElectronicStore.WinForms
             pnlToolbar.Name = "pnlToolbar";
             pnlToolbar.Size = new Size(1050, 76);
             pnlToolbar.TabIndex = 0;
+            // 
+            // txtSearchSale
+            // 
+            txtSearchSale.Location = new Point(236, 35);
+            txtSearchSale.Name = "txtSearchSale";
+            txtSearchSale.Size = new Size(185, 23);
+            txtSearchSale.TabIndex = 4;
+            txtSearchSale.TextChanged += txtSearchSale_TextChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(161, 43);
+            label1.Name = "label1";
+            label1.Size = new Size(69, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Search Sale ";
             // 
             // btnCreateSale
             // 
@@ -144,22 +163,15 @@ namespace ElectronicStore.WinForms
             lblGridTitle.TabIndex = 0;
             lblGridTitle.Text = "Transactions";
             // 
-            // label1
+            // dtpSaleDate
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(161, 43);
-            label1.Name = "label1";
-            label1.Size = new Size(69, 15);
-            label1.TabIndex = 3;
-            label1.Text = "Search Sale ";
-            // 
-            // txtSearchSale
-            // 
-            txtSearchSale.Location = new Point(236, 35);
-            txtSearchSale.Name = "txtSearchSale";
-            txtSearchSale.Size = new Size(185, 23);
-            txtSearchSale.TabIndex = 4;
-            txtSearchSale.TextChanged += txtSearchSale_TextChanged;
+            dtpSaleDate.Format = DateTimePickerFormat.Short;
+            dtpSaleDate.Location = new Point(438, 35);
+            dtpSaleDate.Name = "dtpSaleDate";
+            dtpSaleDate.ShowCheckBox = true;
+            dtpSaleDate.Size = new Size(200, 23);
+            dtpSaleDate.TabIndex = 5;
+            dtpSaleDate.ValueChanged += dtpSaleDate_ValueChanged;
             // 
             // SaleForm
             // 
@@ -195,5 +207,6 @@ namespace ElectronicStore.WinForms
         private DataGridViewButtonColumn colViewDetail;
         private TextBox txtSearchSale;
         private Label label1;
+        private DateTimePicker dtpSaleDate;
     }
 }

@@ -108,9 +108,24 @@ public partial class SaleForm : Form
     object sender,
     EventArgs e)
     {
+        SearchSales();
+    }
+
+    private void dtpSaleDate_ValueChanged(object sender, EventArgs e)
+    {
+        SearchSales();
+
+    }
+
+    private void SearchSales()
+    {
         var model = new SaleSearchRequestModel
         {
-            KeyWord = txtSearchSale.Text.Trim()
+            KeyWord = txtSearchSale.Text.Trim(),
+
+            SaleDate = dtpSaleDate.Checked
+                ? dtpSaleDate.Value.Date
+                : null
         };
 
         var response =
