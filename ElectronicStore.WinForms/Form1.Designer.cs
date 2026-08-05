@@ -34,6 +34,9 @@ namespace ElectronicStore.WinForms
             colEdit = new DataGridViewButtonColumn();
             colDelete = new DataGridViewButtonColumn();
             pnlGridToolbar = new Panel();
+            btnRestock = new Button();
+            nudRestock = new NumericUpDown();
+            label2 = new Label();
             btnLowStock = new Button();
             nudLowStock = new NumericUpDown();
             label1 = new Label();
@@ -47,6 +50,7 @@ namespace ElectronicStore.WinForms
             pnlGridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
             pnlGridToolbar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudRestock).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudLowStock).BeginInit();
             SuspendLayout();
             // 
@@ -238,6 +242,9 @@ namespace ElectronicStore.WinForms
             // 
             // pnlGridToolbar
             // 
+            pnlGridToolbar.Controls.Add(btnRestock);
+            pnlGridToolbar.Controls.Add(nudRestock);
+            pnlGridToolbar.Controls.Add(label2);
             pnlGridToolbar.Controls.Add(btnLowStock);
             pnlGridToolbar.Controls.Add(nudLowStock);
             pnlGridToolbar.Controls.Add(label1);
@@ -251,30 +258,59 @@ namespace ElectronicStore.WinForms
             pnlGridToolbar.Size = new Size(1134, 68);
             pnlGridToolbar.TabIndex = 0;
             // 
+            // btnRestock
+            // 
+            btnRestock.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnRestock.Location = new Point(638, 30);
+            btnRestock.Name = "btnRestock";
+            btnRestock.Size = new Size(151, 23);
+            btnRestock.TabIndex = 12;
+            btnRestock.Text = "Restock";
+            btnRestock.Click += btnRestock_Click;
+            // 
+            // nudRestock
+            // 
+            nudRestock.Location = new Point(542, 31);
+            nudRestock.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            nudRestock.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudRestock.Name = "nudRestock";
+            nudRestock.Size = new Size(90, 23);
+            nudRestock.TabIndex = 11;
+            nudRestock.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(475, 34);
+            label2.Name = "label2";
+            label2.Size = new Size(48, 15);
+            label2.TabIndex = 10;
+            label2.Text = "Restock";
+            // 
             // btnLowStock
             // 
             btnLowStock.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnLowStock.Location = new Point(610, 20);
+            btnLowStock.Location = new Point(638, 1);
             btnLowStock.Name = "btnLowStock";
-            btnLowStock.Size = new Size(81, 26);
+            btnLowStock.Size = new Size(151, 23);
             btnLowStock.TabIndex = 9;
             btnLowStock.Text = "Low Stock";
             btnLowStock.Click += btnLowStock_Click;
             // 
             // nudLowStock
             // 
-            nudLowStock.Location = new Point(544, 23);
+            nudLowStock.Location = new Point(542, 2);
             nudLowStock.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             nudLowStock.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudLowStock.Name = "nudLowStock";
-            nudLowStock.Size = new Size(60, 23);
+            nudLowStock.Size = new Size(90, 23);
             nudLowStock.TabIndex = 5;
             nudLowStock.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(477, 28);
+            label1.Location = new Point(475, 10);
             label1.Name = "label1";
             label1.Size = new Size(61, 15);
             label1.TabIndex = 4;
@@ -335,6 +371,7 @@ namespace ElectronicStore.WinForms
             ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
             pnlGridToolbar.ResumeLayout(false);
             pnlGridToolbar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudRestock).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudLowStock).EndInit();
             ResumeLayout(false);
         }
@@ -368,5 +405,8 @@ namespace ElectronicStore.WinForms
         private Label label1;
         private Button btnLowStock;
         private NumericUpDown nudLowStock;
+        private NumericUpDown nudRestock;
+        private Label label2;
+        private Button btnRestock;
     }
 }

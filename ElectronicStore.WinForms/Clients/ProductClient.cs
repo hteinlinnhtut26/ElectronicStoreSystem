@@ -228,4 +228,43 @@ public class ProductClient
             };
         }
     }
+
+    public ProductRestockResponseModel RestockProduct(ProductRestockRequestModel model)
+    {
+        try
+        {
+            string json = JsonConvert.SerializeObject(model);
+            StringContent stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.PostAsync($"{_baseUrl}/Restock", stringContent).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = response.Content.ReadAsStringAsync().Result;
+                ProductRestockResponseModel? responseModel = JsonConvert.DeserializeObject<ProductRestockResponseModel>(content);
+
+                return responseModel ?? new ProductRestockResponseModel
+                {
+                    IsSuccess = false,
+                    Message = "Unable to restock product"
+                };
+            }
+
+            return new ProductRestockResponseModel
+            {
+                IsSuccess = true,
+                Message = "Unable to restock product"
+            };
+        }
+        catch 
+        {
+
+            return new ProductRestockResponseModel
+            {
+                IsSuccess = false,
+                Message = "Cannot connect to the API server."
+            };
+        }
+    }
 }

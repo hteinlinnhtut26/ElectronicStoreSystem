@@ -243,4 +243,37 @@ public class ProductService
             Products = products
         };
     }
+
+    public ProductRestockResponseModel RestockProduct(ProductRestockRequestModel model) 
+    {
+        if (model.Quantity <= 0)
+        {
+            return new ProductRestockResponseModel
+            {
+                IsSuccess = true,
+                Message = "Restock quantity must be grearter than zero"
+            };
+        }
+
+        Database.AppDbContextModels.Product? product = _db.Products.FirstOrDefault(x=> x.ProductId == model.ProductId);
+
+        if (product == null)
+        {
+            return new ProductRestockResponseModel
+            {
+                IsSuccess = false,
+                Message = "No product found",
+            };
+        }
+
+        product.StockQuantity += model.Quantity;
+        _db.SaveChanges();
+        return new ProductRestockResponseModel
+        {
+            IsSuccess = true,
+            Message =  "Stock update successfully"
+        };
+    
+    }
+
 }

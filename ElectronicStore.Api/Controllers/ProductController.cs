@@ -78,14 +78,23 @@ public class ProductController : ControllerBase
 
         return Ok(response);
     }
+
     [HttpPost("Search")]
     public ProductSearchResponseModel SearchProducts(ProductSearchRequestModel model)
     {
         return _productService.SearchProducts(model);
     }
+
     [HttpPost("LowStock")]
     public ProductLowStockResponseModel GetLowStock(ProductLowStockRequestModel model)
     {
         return _productService.GetLowStockProducts(model);
+    }
+
+    [HttpPost("Restock")]
+    public IActionResult Restock(ProductRestockRequestModel model)
+    {
+        var response = _productService.RestockProduct(model);
+        return Ok(response);
     }
 }

@@ -373,14 +373,17 @@ public partial class Form1 : Form
         BindProductGrid(response.Products);
     }
 
-    private void btnLowStock_Click(object sender, EventArgs e)
+    private void btnLowStock_Click(
+     object sender,
+     EventArgs e)
     {
         var model = new ProductLowStockRequestModel
         {
             Stock = (int)nudLowStock.Value
         };
 
-        var response = _productClient.GetLowStockProducts(model);
+        var response =
+            _productClient.GetLowStockProducts(model);
 
         if (!response.IsSuccess)
         {
@@ -393,6 +396,71 @@ public partial class Form1 : Form
             return;
         }
 
+        if (response.Products == null ||
+            response.Products.Count == 0)
+        {
+            MessageBox.Show(
+                "No low stock products found.",
+                "Low Stock",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+
+            LoadProductList();
+            return;
+        }
+
         BindProductGrid(response.Products);
+    }
+
+    private void btnRestock_Click(
+    object sender,
+    EventArgs e)
+    {
+        if (dgvProducts.CurrentRow == null)
+        {
+            MessageBox.Show(
+                "Please select a product.",
+                "Restock",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+
+            return;
+        }
+
+        int productId =
+            Convert.ToInt32(
+                dgvProducts.CurrentRow
+                    .Cells["ProductId"]
+                    .Value);
+
+        int quantity =
+            (int)nudRestock.Value;
+
+        var model =
+            new ProductRestockRequestModel
+            {
+                ProductId = productId,
+                Quantity = quantity
+            };
+
+        var response =
+            _productClient.RestockProduct(model);
+
+        MessageBox.Show(
+            response.Message,
+            "Restock",
+            MessageBoxButtons.OK,
+            response.IsSuccess
+                ? MessageBoxIcon.Information
+                : MessageBoxIcon.Error);
+
+        if (!response.IsSuccess)
+        {
+            return;
+        }
+
+        LoadProductList();
+
+        nudRestock.Value = 1;
     }
 }
